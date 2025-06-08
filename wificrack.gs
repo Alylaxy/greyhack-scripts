@@ -4,9 +4,14 @@
 crypto = include_lib("/lib/crypto.so")
 shell = get_shell
 computador = shell.host_computer
-caminho = "/home/" + active_user + "/senhas.txt"
-senhas = computador.File(caminho)
-conteudoSenhas = senhas.get_content()
+caminho = "/home/" + active_user + "/"
+nomeArquivo = "senhas.txt"
+senhas = computador.File(caminho+nomeArquivo)
+if(senhas == null) then 
+	gate = computador.touch(caminho, nomeArquivo)
+	senhas = computador.File(caminho+nomeArquivo)
+end if
+conteudoSenhas = senhas.get_content
 
 
 //FUNÇÕES
@@ -96,7 +101,7 @@ print("Tentando conectar automaticamente...")
 resultadoConexao = conectaWifi(computador, placaDeRede, bssid, essid, senhaWifi)
 if(resultadoConexao == 1) then
 	print("Salvando nova senha...")
-	resultadoSalvarSenha = salvaSenha(senhas, essid, senhaWifi, conteudoSenhas, caminho)
+	resultadoSalvarSenha = salvaSenha(senhas, essid, senhaWifi, conteudoSenhas, caminho+nomeArquivo)
 else
 	print(resultadoConexao)
 end if
